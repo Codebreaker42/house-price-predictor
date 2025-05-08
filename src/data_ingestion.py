@@ -14,7 +14,7 @@ logger.setLevel('DEBUG')
 console_handler= logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
-log_file_path= os.path.join(log_dir, 'data_ingestion')
+log_file_path= os.path.join(log_dir, 'data_ingestion.log')
 file_handler= logging.FileHandler(log_file_path)
 file_handler.setLevel('DEBUG')
 
