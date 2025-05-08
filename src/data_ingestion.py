@@ -44,9 +44,14 @@ def load_data(data_url: str) -> pd.DataFrame:
 def preprocess_data(df: pd.DataFrame) -> None:
     """ removing the useless columns and saving csv file"""
     try:
-        df.drop(columns=['Unnamed: 0','additionalrooms','carpetarea','opensides','facing','totalfloor','overlooking','projectname','possesiondate','roadfaceing'],inplace=True)
+        column= ['Unnamed: 0','additionalrooms','carpetarea','opensides','facing','totalfloor','overlooking','projectname','possesiondate','roadfaceing']
+        df.drop(columns=column ,inplace=True)
+        logger.debug(f"unwanted columns {column} are deleted successfully")
+        subset= ['age','floor','ownership','amenitiesnot','amenitiesavailable','area','bathroom']
+        df.dropna(subset=subset ,inplace=True )
+        logger.debug(f"null values from {subset} is deleted successfully")
         data_path= 'dataset'
-        os.makedirs(data_path)
+        os.makedirs(data_path, exist_ok=True)
         dataset= os.path.join(data_path, 'main_data.csv')
         df.to_csv(dataset)
         logger.debug(f"dataset saved to {dataset} folder successfully")
