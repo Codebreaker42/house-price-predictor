@@ -53,7 +53,7 @@ def preprocess_data(df: pd.DataFrame) -> None:
         data_path= 'dataset'
         os.makedirs(data_path, exist_ok=True)
         dataset= os.path.join(data_path, 'main_data.csv')
-        df.to_csv(dataset)
+        df.to_csv(dataset, index=False)
         logger.debug(f"dataset saved to {dataset} folder successfully")
     except Exception as e:
         logger.error(f'Unexpected error occur while saving the data {e}')
@@ -65,6 +65,7 @@ def main():
         df= load_data(data_url= data_path)
         logger.debug("data loaded succesfully")
         preprocess_data(df)
+        print(df.info())
     except Exception as e:
         logger.error(f'Unexpected error occured while saving the file : {e}')
 
