@@ -147,6 +147,30 @@ def preprocess_status(df: pd.DataFrame)->pd.DataFrame:
         logger.debug(f"unexpected error while preprocess status: {e}")
         raise
 
+def preprocess_balcony(df: pd.DataFrame) -> pd.DataFrame:
+    try:
+        df['balconies'].value_counts()
+        # Calculate value counts for Column1
+        value_counts = df['balconies'].value_counts()
+
+        # Identify categories with value counts less than 10
+        categories_to_drop = value_counts[value_counts < 135].index
+
+        # Drop rows with categories having value counts less than 10
+        df = df[~df['balconies'].isin(categories_to_drop)]
+
+        # Reset the index if needed
+        df.reset_index(drop=True, inplace=True)
+        df['balconies']=df['balconies'].fillna(2)
+        df['balconies'].value_counts()
+        df['balconies']=df['balconies'].astype('int64')
+        return df
+    
+    except Exception as e:
+        logger.debug(f"unexpected error while preprocess balcony: {e}")
+        raise
+
+
 
 def main() -> None:
     try:
@@ -155,21 +179,34 @@ def main() -> None:
         # age 
         df= preprocess_age(df)
         logger.debug("age preprocessing is successfully done")
+
         # area 
         df=preprocess_area(df)
         logger.debug("area preprocessing is successfully done")
+
         #bhk
         df= preprocess_bhk(df)
         logger.debug("bhk preprocessing is successfully done")
+
         # floor 
         df= preprocess_floor(df)
         logger.debug("floor preprocessing is successfully done")
+
         # location 
         df= preprocess_location(df)
         logger.debug("location preprocessing is successfully done")
+
         # price per square 
         df= preprocess_price_per_square(df)
         logger.debug("price per square preprocessing is successfully done")
+
+        # status 
+        df= preprocess_status(df)
+        logger.debug("balcony preprocessing is successfully done")
+
+        # balcony 
+        df= preprocess_balcony(df)
+        logger.debug("balcony preprocessing is successfully done")
         print(df.head())
         print(df.info())
 
