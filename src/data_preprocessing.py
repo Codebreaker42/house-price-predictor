@@ -30,7 +30,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-logger.debug("data Preprocessing Logging starts here ")
+logger.debug("step2 - Data Preprocessing Logging starts here ")
 
 def preprocess_age(df: pd.DataFrame) -> pd.DataFrame:
     try:
@@ -169,6 +169,15 @@ def preprocess_balcony(df: pd.DataFrame) -> pd.DataFrame:
     except Exception as e:
         logger.debug(f"unexpected error while preprocess balcony: {e}")
         raise
+    
+def preprocess_neworold(df: pd.DataFrame) -> pd.DataFrame:
+    try:
+        value_to_del= 'neworold'
+        df= df[df['neworold'] != value_to_del]
+        return df
+    except Exception as e:
+        logger.debug(f"unexpected error occur while preprocessing neworold: {e}")
+        raise
 
 
 
@@ -176,6 +185,7 @@ def main() -> None:
     try:
         df= pd.read_csv('dataset/main_data.csv')
         logger.debug('csv file open successfully') 
+        print(df['neworold'].value_counts())
         # age 
         df= preprocess_age(df)
         logger.debug("age preprocessing is successfully done")
@@ -207,9 +217,14 @@ def main() -> None:
         # balcony 
         df= preprocess_balcony(df)
         logger.debug("balcony preprocessing is successfully done")
-        print(df.head())
-        print(df.info())
 
+        # saving the dataset 
+        data_path= 'dataset'
+        os.makedirs(data_path, exist_ok=True)
+        dataset= os.path.join(data_path, 'main_data.csv')
+        df.to_csv(dataset, index=False)
+        logger.debug(f"dataset saved to {dataset} folder successfully")
+    
     except Exception as e:
         logger.debug(f"Unexpected error : {e}")
 

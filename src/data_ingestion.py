@@ -26,7 +26,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-logger.debug("logging starts here")
+logger.debug("step 1 - Data Ingestion logging starts here")
 
 def load_data(data_url: str) -> pd.DataFrame:
     """ load data from a csv file and change it into pd dataframe """
