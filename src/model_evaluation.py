@@ -48,10 +48,10 @@ def train_test_split_and_save(df: pd.DataFrame) -> None:
         y_train=np.array(y_train).reshape(-1,1)
         y_test=np.array(y_test).reshape(-1,1)
 
-        print(x_train.shape)
-        print(x_test.shape)
-        print(y_train.shape)
-        print(y_test.shape)
+        # print(x_train.shape)
+        # print(x_test.shape)
+        # print(y_train.shape)
+        # print(y_test.shape)
 
         return x_train, x_test, y_train, y_test
 
@@ -79,9 +79,7 @@ def load_model(file_path: str):
 def evaluate_model(model, x_test: np.ndarray, y_test: np.ndarray) -> dict:
     try:
         y_pred= model.predict(x_test)
-        print(len(y_pred))
-        print(len(y_test))
-        # return {}
+
         mse = mean_squared_error(y_test, y_pred)
         mae = mean_absolute_error(y_test, y_pred)
         accuracy = r2_score(y_test, y_pred)
@@ -111,7 +109,6 @@ def main() -> None:
 
         logger.debug(f"evaluating model performence")
         metrics= evaluate_model(model, x_test, y_test)
-        print("hi")
         print(metrics['accuracy'])
         print(metrics['mse'])
         print(metrics['mae'])

@@ -126,7 +126,7 @@ def main() -> None:
 
         df= change_datatype(df)
         logger.debug(f"columns successfully changes in specific datatype")
-        print(df.info())
+        # print(df.info())
 
         # saving the dataset 
         data_path= 'dataset'

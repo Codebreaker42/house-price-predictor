@@ -54,10 +54,10 @@ def train_test_split_and_save(df: pd.DataFrame) -> None:
         y_train=np.array(y_train).reshape(-1,1)
         y_test=np.array(y_test).reshape(-1,1)
 
-        print(x_train.shape)
-        print(x_test.shape)
-        print(y_train.shape)
-        print(y_test.shape)
+        # print(x_train.shape)
+        # print(x_test.shape)
+        # print(y_train.shape)
+        # print(y_test.shape)
 
         return x_train, x_test, y_train, y_test
 
@@ -108,7 +108,7 @@ def main() -> None:
 
         # train test split 
         x_train,x_test, y_train, y_test = train_test_split_and_save(df)
-        print(x_train)
+        # print(x_train)
         logger.debug(f"train test split and save is successfully done")
         
         # model 

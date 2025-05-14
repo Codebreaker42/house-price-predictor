@@ -65,7 +65,7 @@ def main():
         df= load_data(data_url= data_path)
         logger.debug("data loaded succesfully")
         preprocess_data(df)
-        print(df.info())
+        # print(df.info())
     except Exception as e:
         logger.error(f'Unexpected error occured while saving the file : {e}')
 

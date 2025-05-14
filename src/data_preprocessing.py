@@ -185,7 +185,7 @@ def main() -> None:
     try:
         df= pd.read_csv('dataset/main_data.csv')
         logger.debug('csv file open successfully') 
-        print(df['neworold'].value_counts())
+        
         # age 
         df= preprocess_age(df)
         logger.debug("age preprocessing is successfully done")
