@@ -138,6 +138,6 @@ def main() -> None:
     except Exception as e:
         logger.debug(f"Unexpected occur {e}")
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     main()
 

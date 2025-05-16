@@ -5,6 +5,8 @@ import logging
 import pickle
 from sklearn.metrics import r2_score,mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
+import json
+import yaml
 
 log_dir= "logs"
 os.makedirs(log_dir, exist_ok= True)
@@ -33,7 +35,22 @@ logger.addHandler(file_handler)
 
 logger.debug(f"Step-5 : Model Evaluation Logging Starts Here")
 
-def train_test_split_and_save(df: pd.DataFrame) -> None:
+def load_params(params_path : str ) -> dict:
+    try:
+        with open("params.yaml",'r') as file:
+            params= yaml.safe_load(file)
+        logger.debug("params file successfully opened from {params_path}")
+        return params
+
+    except FileNotFoundError:
+        logger.debug(f"params.yaml not found in {params_path}")
+        raise
+
+    except Exception as e:
+        logger.debug(f"error while loading params : {e}")
+        raise 
+
+def train_test_split_and_save(df: pd.DataFrame, test_size : float , random_state= int)  :
     try:
         # spliting into two parts
         df['price'].dtype
@@ -42,7 +59,7 @@ def train_test_split_and_save(df: pd.DataFrame) -> None:
         logger.debug("successfully spilited into two parts")
 
         # train test split
-        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.20,random_state=42)
+        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size= test_size,random_state =random_state)
 
         # reshaping y column
         y_train=np.array(y_train).reshape(-1,1)
@@ -96,8 +113,23 @@ def evaluate_model(model, x_test: np.ndarray, y_test: np.ndarray) -> dict:
         logger.debug(f"error while evaluation model performence : {e}")
         raise
 
+def save_metric(metric : dict, file_path : str) -> None:
+    try:
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        with open(file_path, 'w') as file:
+            json.dump(metric, file, indent= 4)
+
+        logger.debug(f"Metrics saved to {file_path} successfully in json format")
+
+    except Exception as e:
+        logger.debug(f"error occur while saving metrics in json : {e}")
+        raise 
+    
 def main() -> None:
     try:
+        # loading params 
+        params= load_params(params_path = 'params.yaml')
         logger.debug("loading the model")
         model_file_path= 'model/model.pkl'
         model = load_model(model_file_path)
@@ -105,13 +137,19 @@ def main() -> None:
         df= pd.read_csv("dataset/main_data.csv")
         logger.debug("dataset successfully loaded")
 
-        x_train, x_test, y_train , y_test = train_test_split_and_save(df)
+        # train test split 
+        test_size= params['model_evaluation']['test_size']
+        random_state= params['model_evaluation']['random_state']
+        x_train, x_test, y_train , y_test = train_test_split_and_save(df, test_size, random_state)
 
         logger.debug(f"evaluating model performence")
         metrics= evaluate_model(model, x_test, y_test)
         print(metrics['accuracy'])
         print(metrics['mse'])
         print(metrics['mae'])
+
+        # saving metric in json 
+        save_metric(metrics, 'model_reports/metrics.json')
 
     except Exception as e:
         logger.debug(f"Unexpected error while Model Evaluation : {e}")

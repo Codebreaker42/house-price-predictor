@@ -89,7 +89,7 @@ def preprocess_floor(df: pd.DataFrame) -> pd.DataFrame:
         return df
     
     except Exception as e:
-        logger.debug(f"unexpected error while preprocessing the floor")
+        logger.debug(f"unexpected error while preprocessing the floor ")
         raise
 
 def preprocess_location(df: pd.DataFrame) -> pd.DataFrame:

@@ -7,6 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 import pickle
+import yaml
 
 import logging
 
@@ -38,8 +39,22 @@ logger.addHandler(file_handler)
 
 logger.debug("step4 - Model Training Logging starts here ")
 
+def load_params(params_path : str ) -> dict:
+    try:
+        with open("params.yaml",'r') as file:
+            params= yaml.safe_load(file)
+        logger.debug("params file successfully opened from {params_path} ")
+        return params
 
-def train_test_split_and_save(df: pd.DataFrame) -> None:
+    except FileNotFoundError:
+        logger.debug(f"params.yaml not found in {params_path}")
+        raise
+
+    except Exception as e:
+        logger.debug(f"error while loading params : {e}")
+        raise 
+
+def train_test_split_and_save(df: pd.DataFrame, test_size: float , random_state: int) :
     try:
         # spliting into two parts
         df['price'].dtype
@@ -48,7 +63,7 @@ def train_test_split_and_save(df: pd.DataFrame) -> None:
         logger.debug("successfully spilited into two parts")
 
         # train test split
-        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.20,random_state=42)
+        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=test_size,random_state=random_state)
 
         # reshaping y column
         y_train=np.array(y_train).reshape(-1,1)
@@ -85,7 +100,7 @@ def train_model(x_train : np.ndarray, y_train: np.ndarray, params: dict) -> Grad
 
 def save_model(model, model_file_path: str) -> None:
     try:
-        os.makedirs(os.path.dirname(model_file_path) , exist_ok=True)
+        os.makedirs(os.path.dirname(model_file_path), exist_ok=True)
 
         with open(model_file_path, 'wb') as f:
             pickle.dump(model, f)
@@ -102,24 +117,28 @@ def save_model(model, model_file_path: str) -> None:
 
 def main() -> None:
     try:
-        params = {'learning_rate': .6}
+        params = load_params(params_path= 'params.yaml')
+        # params = {'learning_rate': .6}
         df= pd.read_csv('dataset/main_data.csv')
         logger.debug('csv file open successfully')
 
         # train test split 
-        x_train,x_test, y_train, y_test = train_test_split_and_save(df)
+        test_size= params['model_training']['test_size']
+        random_state= params['model_training']['random_state']
+        x_train,x_test, y_train, y_test = train_test_split_and_save(df, test_size, random_state)
         # print(x_train)
         logger.debug(f"train test split and save is successfully done")
         
         # model 
-        model = train_model(x_train, y_train , params)
+        lr= params['model_training']['lr']
+        prm= {'learning_rate': lr}
+        model = train_model(x_train, y_train , prm)
         logger.debug("Model is trained successfully")
 
         # saving model 
         save_model_path= 'model/model.pkl'
         save_model(model, save_model_path)
 
-        
     except Exception as e:
         logging.debug("Unexpected error occur while Model Training : {e}")
         

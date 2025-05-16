@@ -1,6 +1,7 @@
 import logging
 import os 
 import pandas as pd
+import yaml
 
 # log directory creation 
 log_dir="logs"
@@ -26,7 +27,22 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-logger.debug("step 1 - Data Ingestion logging starts here")
+logger.debug("step 1 - Data Ingestion logging starts here ")
+
+def load_params(params_path : str) -> dict:
+    try:
+        with open(params_path, 'r') as file:
+            params= yaml.safe_load(file)
+        logger.debug("params.yaml successfully opened")
+        return params 
+
+    except FileNotFoundError:
+        logger.debug(f"file not found from {params_path}")
+        raise
+
+    except Exception as e:
+        logger.debug(f"error while loading the parameters from .yaml {e}")
+        raise 
 
 def load_data(data_url: str) -> pd.DataFrame:
     """ load data from a csv file and change it into pd dataframe """
@@ -61,7 +77,9 @@ def preprocess_data(df: pd.DataFrame) -> None:
 
 def main():
     try:
-        data_path= 'https://raw.githubusercontent.com/Codebreaker42/house-price-predictor/refs/heads/master/Pune_property_data.csv'
+        params= load_params(params_path ='params.yaml')
+        # data_path= 'https://raw.githubusercontent.com/Codebreaker42/house-price-predictor/refs/heads/master/Pune_property_data.csv'
+        data_path= params['data_ingestion']['data_path']
         df= load_data(data_url= data_path)
         logger.debug("data loaded succesfully")
         preprocess_data(df)
