@@ -83,14 +83,17 @@ def train_test_split_and_save(df: pd.DataFrame, test_size: float , random_state:
 def train_model(x_train : np.ndarray, y_train: np.ndarray, params: dict) -> GradientBoostingRegressor:
     try:
         lr= params['learning_rate']
+        
         step1=ColumnTransformer([
             ('col_tnf',OneHotEncoder(sparse_output=False, drop='first'),[10,12])
         ],remainder='passthrough')
+
         step2=GradientBoostingRegressor(learning_rate=lr)
         pipe=Pipeline([
             ('step1',step1),
             ('step2',step2)
         ])
+
         pipe.fit(x_train,y_train)
         return pipe
 
@@ -130,7 +133,7 @@ def main() -> None:
         logger.debug(f"train test split and save is successfully done")
         
         # model 
-        lr= params['model_training']['lr']
+        lr = params['model_training']['lr']
         print(lr)
         prm= {'learning_rate': lr}
         model = train_model(x_train, y_train , prm)

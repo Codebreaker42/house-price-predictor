@@ -7,6 +7,7 @@ from sklearn.metrics import r2_score,mean_squared_error, mean_absolute_error, r2
 from sklearn.model_selection import train_test_split
 import json
 import yaml
+from dvclive import Live
 
 log_dir= "logs"
 os.makedirs(log_dir, exist_ok= True)
@@ -149,6 +150,18 @@ def main() -> None:
 
         # saving metric in json 
         save_metric(metrics, 'model_reports/metrics.json')
+        logger.debug("metrics is saved successfully")
+
+        # experiment tracking using dvclive (to track params and metrics)
+        with Live(save_dvc_exp= True) as live:
+            logger.debug("tracking metrics")
+            live.log_metric('accuracy', metrics['accuracy'])
+            live.log_metric("mean squared error", metrics['mse'])
+            live.log_metric("mean absolute error", metrics['mae'])
+
+            logger.debug("Tracking Params")
+            live.log_params(params)
+        logger.debug("experiment tracking successfully done")
 
     except Exception as e:
         logger.debug(f"Unexpected error while Model Evaluation : {e}")
