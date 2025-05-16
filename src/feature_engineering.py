@@ -113,7 +113,7 @@ def change_datatype(df: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     try:
-        df= pd.read_csv('dataset/main_data.csv')
+        df= pd.read_csv('dataset/data_preprocessing/main_data.csv')
         logger.debug('csv file open successfully')
 
         # featrure construction 
@@ -129,7 +129,7 @@ def main() -> None:
         # print(df.info())
 
         # saving the dataset 
-        data_path= 'dataset'
+        data_path= 'dataset/feature_engineering'
         os.makedirs(data_path, exist_ok=True)
         dataset= os.path.join(data_path, 'main_data.csv')
         df.to_csv(dataset, index=False)

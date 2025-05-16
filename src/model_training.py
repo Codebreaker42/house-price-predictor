@@ -100,7 +100,7 @@ def train_model(x_train : np.ndarray, y_train: np.ndarray, params: dict) -> Grad
 
 def save_model(model, model_file_path: str) -> None:
     try:
-        os.makedirs(os.path.dirname(model_file_path), exist_ok=True)
+        os.makedirs(os.path.dirname(model_file_path) , exist_ok=True)
 
         with open(model_file_path, 'wb') as f:
             pickle.dump(model, f)
@@ -119,7 +119,7 @@ def main() -> None:
     try:
         params = load_params(params_path= 'params.yaml')
         # params = {'learning_rate': .6}
-        df= pd.read_csv('dataset/main_data.csv')
+        df= pd.read_csv('dataset/feature_engineering/main_data.csv')
         logger.debug('csv file open successfully')
 
         # train test split 
@@ -131,6 +131,7 @@ def main() -> None:
         
         # model 
         lr= params['model_training']['lr']
+        print(lr)
         prm= {'learning_rate': lr}
         model = train_model(x_train, y_train , prm)
         logger.debug("Model is trained successfully")

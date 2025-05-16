@@ -66,7 +66,7 @@ def preprocess_data(df: pd.DataFrame) -> None:
         subset= ['age','floor','ownership','amenitiesnot','amenitiesavailable','area','bathroom']
         df.dropna(subset=subset ,inplace=True )
         logger.debug(f"null values from {subset} is deleted successfully")
-        data_path= 'dataset'
+        data_path= 'dataset/data_ingestion'
         os.makedirs(data_path, exist_ok=True)
         dataset= os.path.join(data_path, 'main_data.csv')
         df.to_csv(dataset, index=False)

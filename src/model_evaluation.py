@@ -96,7 +96,6 @@ def load_model(file_path: str):
 def evaluate_model(model, x_test: np.ndarray, y_test: np.ndarray) -> dict:
     try:
         y_pred= model.predict(x_test)
-
         mse = mean_squared_error(y_test, y_pred)
         mae = mean_absolute_error(y_test, y_pred)
         accuracy = r2_score(y_test, y_pred)
@@ -134,7 +133,7 @@ def main() -> None:
         model_file_path= 'model/model.pkl'
         model = load_model(model_file_path)
 
-        df= pd.read_csv("dataset/main_data.csv")
+        df= pd.read_csv("dataset/feature_engineering/main_data.csv")
         logger.debug("dataset successfully loaded")
 
         # train test split 

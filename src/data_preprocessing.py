@@ -183,7 +183,7 @@ def preprocess_neworold(df: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     try:
-        df= pd.read_csv('dataset/main_data.csv')
+        df= pd.read_csv('dataset/data_ingestion/main_data.csv')
         logger.debug('csv file open successfully') 
         
         # age 
@@ -219,9 +219,9 @@ def main() -> None:
         logger.debug("balcony preprocessing is successfully done")
 
         # saving the dataset 
-        data_path= 'dataset'
+        data_path= 'dataset/data_preprocessing'
         os.makedirs(data_path, exist_ok=True)
-        dataset= os.path.join(data_path, 'main_data.csv')
+        dataset= os.path.join(data_path,'main_data.csv')
         df.to_csv(dataset, index=False)
         logger.debug(f"dataset saved to {dataset} folder successfully")
     
