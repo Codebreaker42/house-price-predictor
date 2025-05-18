@@ -7,6 +7,9 @@ stages:
       hash: md5
       md5: f0c5966110f5149f66125e1b4d7e520f
       size: 3348
+    params:
+      params.yaml:
+        data_ingestion.data_path: Pune_property_data.csv
     outs:
     - path: dataset/data_ingestion
       hash: md5
@@ -59,21 +62,35 @@ stages:
       nfiles: 1
     - path: src/model_training.py
       hash: md5
-      md5: 89f5f7671daeeee96569ac49b84121a9
-      size: 4739
+      md5: e96529dc1b37b7899d6428137bf31d03
+      size: 4741
+    params:
+      params.yaml:
+        model_training.lr: 0.6
+        model_training.random_state: 42
+        model_training.test_size: 0.25
     outs:
     - path: model/model.pkl
       hash: md5
-      md5: 2c419a37144fb273067b171dc0c95f31
-      size: 144567
+      md5: eed85b166e5ce7eb99c2fdf41e12bd75
+      size: 144854
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/model.pkl
       hash: md5
-      md5: 2c419a37144fb273067b171dc0c95f31
-      size: 144567
+      md5: eed85b166e5ce7eb99c2fdf41e12bd75
+      size: 144854
     - path: src/model_evaluation.py
       hash: md5
       md5: 5470388b9def2675e2f2d1951ed23859
       size: 5492
+    params:
+      params.yaml:
+        model_evaluation.random_state: 42
+        model_evaluation.test_size: 0.25
+    outs:
+    - path: model_reports/metrics.json
+      hash: md5
+      md5: 3fea39dd035660ee658675e0967bbc0f
+      size: 108

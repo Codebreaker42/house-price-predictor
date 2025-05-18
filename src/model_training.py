@@ -43,7 +43,7 @@ def load_params(params_path : str ) -> dict:
     try:
         with open("params.yaml",'r') as file:
             params= yaml.safe_load(file)
-        logger.debug("params file successfully opened from {params_path} ")
+        logger.debug(f"params file successfully opened from {params_path} ")
         return params
 
     except FileNotFoundError:
@@ -144,7 +144,7 @@ def main() -> None:
         save_model(model, save_model_path)
 
     except Exception as e:
-        logging.debug("Unexpected error occur while Model Training : {e}")
+        logging.debug("Unexpected error occur while Model Training : {e}") 
         
 if __name__ == "__main__":
     main()

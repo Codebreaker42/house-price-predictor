@@ -3,6 +3,8 @@ stages:
     cmd: python src/data_ingestion.py
     deps:
     - src/data_ingestion.py
+    params:
+    - data_ingestion.data_path
     outs:
     - dataset/data_ingestion
 
@@ -27,6 +29,10 @@ stages:
     deps:
     - dataset/feature_engineering
     - src/model_training.py
+    params:
+    - model_training.test_size
+    - model_training.random_state
+    - model_training.lr
     outs:
     - model/model.pkl
 
@@ -35,6 +41,12 @@ stages:
     deps:
     - model/model.pkl
     - src/model_evaluation.py
+    params:
+    - model_evaluation.test_size
+    - model_evaluation.random_state
+    outs:
+    - model_reports/metrics.json
+
 metrics:
 - dvclive/metrics.json
 plots:
