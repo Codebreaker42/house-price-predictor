@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 import json
 import yaml
 from dvclive import Live
+import mlflow 
+import dagshub 
 
 log_dir= "logs"
 os.makedirs(log_dir, exist_ok= True)
@@ -36,11 +38,17 @@ logger.addHandler(file_handler)
 
 logger.debug(f"Step-5 : Model Evaluation Logging Starts Here")
 
+# Below code block is for local use
+# -------------------------------------------------------------------------------------
+mlflow.set_tracking_uri('https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow')
+dagshub.init(repo_owner='nitinbdkt777', repo_name='house-price-predictor', mlflow=True)
+logger.debug("dagshub in local successfully done")
+
 def load_params(params_path : str ) -> dict:
     try:
         with open("params.yaml",'r') as file:
             params= yaml.safe_load(file)
-        logger.debug("params file successfully opened from {params_path}")
+        logger.debug(f"params file successfully opened from {params_path}")
         return params
 
     except FileNotFoundError:
@@ -127,44 +135,57 @@ def save_metric(metric : dict, file_path : str) -> None:
         raise 
     
 def main() -> None:
-    try:
-        # loading params 
-        params= load_params(params_path = 'params.yaml')
-        logger.debug("loading the model")
-        model_file_path= 'model/model.pkl'
-        model = load_model(model_file_path)
+    mlflow.set_experiment("my-dvc-model")
+    with mlflow.start_run() as run:
+        try:
+            # loading params 
+            params= load_params(params_path = 'params.yaml')
+            logger.debug("loading the model")
+            model_file_path= 'model/model.pkl'
+            model = load_model(model_file_path)
+            logger.debug(f"model successfully loaded from {model_file_path}")
 
-        df= pd.read_csv("dataset/feature_engineering/main_data.csv")
-        logger.debug("dataset successfully loaded")
+            df= pd.read_csv("dataset/feature_engineering/main_data.csv")
+            logger.debug("dataset successfully loaded")
 
-        # train test split 
-        test_size= params['model_evaluation']['test_size']
-        random_state= params['model_evaluation']['random_state']
-        x_train, x_test, y_train , y_test = train_test_split_and_save(df, test_size, random_state)
+            # train test split 
+            test_size= params['model_evaluation']['test_size']
+            random_state= params['model_evaluation']['random_state']
+            x_train, x_test, y_train , y_test = train_test_split_and_save(df, test_size, random_state)
 
-        logger.debug(f"evaluating model performence")
-        metrics= evaluate_model(model, x_test, y_test)
-        print(metrics['accuracy'])
-        print(metrics['mse'])
-        print(metrics['mae'])
+            logger.debug(f"evaluating model performence")
+            metrics= evaluate_model(model, x_test, y_test)
+            print(metrics['accuracy'])
+            print(metrics['mse'])
+            print(metrics['mae'])
+            # log metric to mlflow 
+            for metric_name , metric_value in metrics.items():
+                mlflow.log_metric(metric_name, metric_value)
+            logger.debug("metric are successfully logged in mlflow ")
 
-        # saving metric in json 
-        save_metric(metrics, 'model_reports/metrics.json')
-        logger.debug("metrics is saved successfully")
+            # saving metric in json 
+            save_metric(metrics, 'model_reports/metrics.json')
+            logger.debug("metrics is saved successfully")
 
-        # experiment tracking using dvclive (to track params and metrics)
-        with Live(save_dvc_exp= True) as live:
-            logger.debug("tracking metrics")
-            live.log_metric('accuracy', metrics['accuracy'])
-            live.log_metric("mean squared error", metrics['mse'])
-            live.log_metric("mean absolute error", metrics['mae'])
+            # logging model parameter to mlflow
+            if hasattr(model, 'get_params'):
+                param= model.get_params()
+                for param_name , param_value in param.items():
+                    mlflow.log_param(param_name, param_value)
 
-            logger.debug("Tracking Params")
-            live.log_params(params)
-        logger.debug("experiment tracking successfully done")
+            # experiment tracking using dvclive (to track params and metrics)
+            with Live(save_dvc_exp= True) as live:
+                logger.debug("tracking metrics")
+                live.log_metric('accuracy', metrics['accuracy'])
+                live.log_metric("mean squared error", metrics['mse'])
+                live.log_metric("mean absolute error", metrics['mae'])
 
-    except Exception as e:
-        logger.debug(f"Unexpected error while Model Evaluation : {e}")
+                logger.debug("Tracking Params")
+                live.log_params(params)
+            logger.debug("experiment tracking successfully done")
+
+        except Exception as e:
+            logger.debug(f"Unexpected error while Model Evaluation : {e}")
 
 if __name__ == '__main__':
     main()

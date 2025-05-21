@@ -83,8 +83,8 @@ stages:
       size: 144854
     - path: src/model_evaluation.py
       hash: md5
-      md5: 5470388b9def2675e2f2d1951ed23859
-      size: 5492
+      md5: 3141133d5bb023531ed3a157d2ac9592
+      size: 6669
     params:
       params.yaml:
         model_evaluation.random_state: 42
