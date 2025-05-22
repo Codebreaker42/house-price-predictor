@@ -1,4 +1,5 @@
 import os 
+import mlflow.sklearn
 import pandas as pd
 import numpy as np
 import logging
@@ -101,6 +102,10 @@ def main() -> None:
             model = load_model(model_file_path)
             logger.debug(f"model successfully loaded from {model_file_path}")
 
+            # log model in mlflow 
+            mlflow.sklearn.log_model(model, "model")
+            logger.debug("model is successfully logged in mlflow")
+
             df= pd.read_csv("dataset/feature_engineering/main_data.csv")
             logger.debug("dataset successfully loaded")
 
@@ -114,6 +119,7 @@ def main() -> None:
             print(metrics['accuracy'])
             print(metrics['mse'])
             print(metrics['mae'])
+
             # log metric to mlflow 
             for metric_name , metric_value in metrics.items():
                 mlflow.log_metric(metric_name, metric_value)
@@ -128,6 +134,10 @@ def main() -> None:
                 param= model.get_params()
                 for param_name , param_value in param.items():
                     mlflow.log_param(param_name, param_value)
+
+            # Log the metrics file to MLflow
+            mlflow.log_artifact('model_reports/metrics.json')
+            logger.debug("artifacts logged in mlflow successfully")
 
             # experiment tracking using dvclive (to track params and metrics)
             with Live(save_dvc_exp= True) as live:

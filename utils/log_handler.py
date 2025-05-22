@@ -7,7 +7,7 @@ def Logger(log_file_name: str):
     os.makedirs(log_dir, exist_ok= True )
 
     # logging configuratation 
-    logger= logging.getLogger("data_ingestion")
+    logger= logging.getLogger(log_file_name.split(".")[0])
     logger.setLevel('DEBUG')
 
     # making handler 

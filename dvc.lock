@@ -69,29 +69,29 @@ stages:
       params.yaml:
         model_training.lr: 0.6
         model_training.random_state: 42
-        model_training.test_size: 0.25
+        model_training.test_size: 0.2
     outs:
     - path: model/model.pkl
       hash: md5
-      md5: 2e633afb487ef433210df2fc26ad1799
-      size: 144854
+      md5: d624e1f54d568eed80707d7c046f7900
+      size: 144423
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/model.pkl
       hash: md5
-      md5: 2e633afb487ef433210df2fc26ad1799
-      size: 144854
+      md5: d624e1f54d568eed80707d7c046f7900
+      size: 144423
     - path: src/model_evaluation.py
       hash: md5
-      md5: 441f6faa2b8ae26d2985895d41133ba0
-      size: 5354
+      md5: cef8586c716c47825181eacaf5862918
+      size: 5719
     params:
       params.yaml:
         model_evaluation.random_state: 42
-        model_evaluation.test_size: 0.25
+        model_evaluation.test_size: 0.2
     outs:
     - path: model_reports/metrics.json
       hash: md5
-      md5: 0fee1d6916c6aad93e6cece88e021f19
-      size: 108
+      md5: b28c84bbc93711bd29cd27e1745c2531
+      size: 109
