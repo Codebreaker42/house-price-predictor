@@ -5,13 +5,13 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
 import pickle
 import yaml
 import sys 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from utils.log_handler import Logger 
+from utils.Train_test_split import train_test_split_and_save
 
 logger= Logger('model_training.log')
 
@@ -31,32 +31,6 @@ def load_params(params_path : str ) -> dict:
     except Exception as e:
         logger.debug(f"error while loading params : {e}")
         raise 
-
-def train_test_split_and_save(df: pd.DataFrame, test_size: float , random_state: int) :
-    try:
-        # spliting into two parts
-        df['price'].dtype
-        x=df.drop(columns=['price'])
-        y=np.log(df['price'])
-        logger.debug("successfully spilited into two parts")
-
-        # train test split
-        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=test_size,random_state=random_state)
-
-        # reshaping y column
-        y_train=np.array(y_train).reshape(-1,1)
-        y_test=np.array(y_test).reshape(-1,1)
-
-        # print(x_train.shape)
-        # print(x_test.shape)
-        # print(y_train.shape)
-        # print(y_test.shape)
-
-        return x_train, x_test, y_train, y_test
-
-    except Exception as e:
-        logger.debug(f"error occured while train test spliting")
-        raise
 
 def train_model(x_train : np.ndarray, y_train: np.ndarray, params: dict) -> GradientBoostingRegressor:
     try:
@@ -122,7 +96,7 @@ def main() -> None:
         save_model(model, save_model_path)
 
     except Exception as e:
-        logging.debug("Unexpected error occur while Model Training : {e}") 
+        logger.debug("Unexpected error occur while Model Training : {e}") 
         
 if __name__ == "__main__":
     main()

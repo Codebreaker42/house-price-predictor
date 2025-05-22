@@ -14,6 +14,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from utils.log_handler import Logger 
+from utils.Train_test_split import train_test_split_and_save
 
 logger= Logger('model_evaluation.log')
 
@@ -23,7 +24,8 @@ logger.debug(f"Step-5 : Model Evaluation Logging Starts Here")
 # -------------------------------------------------------------------------------------
 mlflow.set_tracking_uri('https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow')
 dagshub.init(repo_owner='nitinbdkt777', repo_name='house-price-predictor', mlflow=True)
-logger.debug("dagshub in local successfully done")
+
+logger.debug("dagshub setup in local successfully done")
 
 def load_params(params_path : str ) -> dict:
     try:
@@ -39,33 +41,6 @@ def load_params(params_path : str ) -> dict:
     except Exception as e:
         logger.debug(f"error while loading params : {e}")
         raise 
-
-def train_test_split_and_save(df: pd.DataFrame, test_size : float , random_state= int)  :
-    try:
-        # spliting into two parts
-        df['price'].dtype
-        x=df.drop(columns=['price'])
-        y=np.log(df['price'])
-        logger.debug("successfully spilited into two parts")
-
-        # train test split
-        x_train,x_test,y_train,y_test=train_test_split(x,y,test_size= test_size,random_state =random_state)
-
-        # reshaping y column
-        y_train=np.array(y_train).reshape(-1,1)
-        y_test=np.array(y_test).reshape(-1,1)
-
-        # print(x_train.shape)
-        # print(x_test.shape)
-        # print(y_train.shape)
-        # print(y_test.shape)
-
-        return x_train, x_test, y_train, y_test
-
-    except Exception as e:
-        logger.debug(f"error occured while train test spliting")
-        raise
-
 
 def load_model(file_path: str):
     try:
@@ -109,7 +84,7 @@ def save_metric(metric : dict, file_path : str) -> None:
         with open(file_path, 'w') as file:
             json.dump(metric, file, indent= 4)
 
-        logger.debug(f"Metrics saved to {file_path} successfully in json format")
+        logger.debug(f"Metrics saved to {file_path} successfully.")
 
     except Exception as e:
         logger.debug(f"error occur while saving metrics in json : {e}")
