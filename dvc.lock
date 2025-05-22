@@ -1,58 +1,5 @@
 schema: '2.0'
 stages:
-  data_ingestion:
-    cmd: python src/data_ingestion.py
-    deps:
-    - path: src/data_ingestion.py
-      hash: md5
-      md5: 6d55e4a83b5ec8b1bf8a475afe12406a
-      size: 2813
-    params:
-      params.yaml:
-        data_ingestion.data_path: 
-          https://raw.githubusercontent.com/Codebreaker42/house-price-predictor/refs/heads/master/Pune_property_data.csv
-    outs:
-    - path: dataset/data_ingestion
-      hash: md5
-      md5: a03ae9a6486579107eb2f0d550e5cc69.dir
-      size: 6405838
-      nfiles: 1
-  data_preprocessing:
-    cmd: python src/data_preprocessing.py
-    deps:
-    - path: dataset/data_ingestion
-      hash: md5
-      md5: a03ae9a6486579107eb2f0d550e5cc69.dir
-      size: 6405838
-      nfiles: 1
-    - path: src/data_preprocessing.py
-      hash: md5
-      md5: 34bdc22ecd179ca39dca72604f93a614
-      size: 7510
-    outs:
-    - path: dataset/data_preprocessing
-      hash: md5
-      md5: 193aede6a6301b58245205dbb5169899.dir
-      size: 4863247
-      nfiles: 1
-  feature_engineering:
-    cmd: python src/feature_engineering.py
-    deps:
-    - path: dataset/data_preprocessing
-      hash: md5
-      md5: 193aede6a6301b58245205dbb5169899.dir
-      size: 4863247
-      nfiles: 1
-    - path: src/feature_engineering.py
-      hash: md5
-      md5: ac5760b5b8052e5c8e322b44d69d2d5d
-      size: 4666
-    outs:
-    - path: dataset/feature_engineering
-      hash: md5
-      md5: 778be7a4be41c2bf5bd2b5a8754a1982.dir
-      size: 1004399
-      nfiles: 1
   model_training:
     cmd: python src/model_training.py
     deps:
@@ -84,8 +31,8 @@ stages:
       size: 144423
     - path: src/model_evaluation.py
       hash: md5
-      md5: cef8586c716c47825181eacaf5862918
-      size: 5719
+      md5: 1e43f9200ea88506b49ec247156f8d12
+      size: 6464
     params:
       params.yaml:
         model_evaluation.random_state: 42

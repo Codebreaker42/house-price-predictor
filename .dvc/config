@@ -1,4 +1,6 @@
 [core]
-    remote = dvcstore
+    remote = myremote
 ['remote "dvcstore"']
+    url = s3://house-price-mlops
+['remote "myremote"']
     url = s3://house-price-mlops

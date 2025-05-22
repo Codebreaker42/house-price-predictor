@@ -90,6 +90,18 @@ def save_metric(metric : dict, file_path : str) -> None:
     except Exception as e:
         logger.debug(f"error occur while saving metrics in json : {e}")
         raise 
+
+def save_model_info(run_id: str, model_path: str, file_path: str) -> None:
+    """ saving current model id to future use of model registry and fetching best model to achieve automation """
+    try:
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+        model_info= {"run_id": run_id, "model_path": model_path}
+        with open(file_path,'w') as file:
+            json.dump(model_info, file, indent=4)
+        
+    except Exception as e:
+        logger.debug(f"error while saving model info : {e}")
     
 def main() -> None:
     mlflow.set_experiment("my-dvc-model")
@@ -138,6 +150,10 @@ def main() -> None:
             # Log the metrics file to MLflow
             mlflow.log_artifact('model_reports/metrics.json')
             logger.debug("artifacts logged in mlflow successfully")
+
+            # saving model info 
+            save_model_info(run.info.run_id, "model", "model_reports/model_info.json")
+            logger.debug("Model info saved successfully in model_reports/model_info.json")
 
             # experiment tracking using dvclive (to track params and metrics)
             with Live(save_dvc_exp= True) as live:
