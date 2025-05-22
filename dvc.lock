@@ -5,11 +5,12 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: f0c5966110f5149f66125e1b4d7e520f
-      size: 3348
+      md5: 6d55e4a83b5ec8b1bf8a475afe12406a
+      size: 2813
     params:
       params.yaml:
-        data_ingestion.data_path: Pune_property_data.csv
+        data_ingestion.data_path: 
+          https://raw.githubusercontent.com/Codebreaker42/house-price-predictor/refs/heads/master/Pune_property_data.csv
     outs:
     - path: dataset/data_ingestion
       hash: md5
@@ -26,8 +27,8 @@ stages:
       nfiles: 1
     - path: src/data_preprocessing.py
       hash: md5
-      md5: 21e10f44945b7e82338fdf5da8d76678
-      size: 8067
+      md5: 34bdc22ecd179ca39dca72604f93a614
+      size: 7510
     outs:
     - path: dataset/data_preprocessing
       hash: md5
@@ -44,8 +45,8 @@ stages:
       nfiles: 1
     - path: src/feature_engineering.py
       hash: md5
-      md5: e45402c1f31230d6d0c1cd73d18e6c15
-      size: 5222
+      md5: ac5760b5b8052e5c8e322b44d69d2d5d
+      size: 4666
     outs:
     - path: dataset/feature_engineering
       hash: md5
@@ -62,8 +63,8 @@ stages:
       nfiles: 1
     - path: src/model_training.py
       hash: md5
-      md5: e96529dc1b37b7899d6428137bf31d03
-      size: 4741
+      md5: 0a4cc552085a924916b563001d180125
+      size: 4170
     params:
       params.yaml:
         model_training.lr: 0.6
@@ -72,19 +73,19 @@ stages:
     outs:
     - path: model/model.pkl
       hash: md5
-      md5: eed85b166e5ce7eb99c2fdf41e12bd75
+      md5: 291edcf1f909c2f5c7f7d86a2dc99620
       size: 144854
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/model.pkl
       hash: md5
-      md5: eed85b166e5ce7eb99c2fdf41e12bd75
+      md5: 291edcf1f909c2f5c7f7d86a2dc99620
       size: 144854
     - path: src/model_evaluation.py
       hash: md5
-      md5: 3141133d5bb023531ed3a157d2ac9592
-      size: 6669
+      md5: 9188838f596fd3b2b494c370931c4004
+      size: 6153
     params:
       params.yaml:
         model_evaluation.random_state: 42
@@ -92,5 +93,5 @@ stages:
     outs:
     - path: model_reports/metrics.json
       hash: md5
-      md5: 3fea39dd035660ee658675e0967bbc0f
-      size: 108
+      md5: 7a35cea7b68e64c915f35f1d097277a2
+      size: 109

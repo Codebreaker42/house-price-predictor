@@ -2,31 +2,11 @@ import logging
 import os 
 import pandas as pd
 import yaml
+import sys 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+from utils.log_handler import Logger 
 
-# log directory creation 
-log_dir="logs"
-os.makedirs(log_dir, exist_ok= True )
-
-# logging configuratation 
-logger= logging.getLogger("data_ingestion")
-logger.setLevel('DEBUG')
-
-# making handler 
-console_handler= logging.StreamHandler()
-console_handler.setLevel('DEBUG')
-
-log_file_path= os.path.join(log_dir, 'data_ingestion.log')
-file_handler= logging.FileHandler(log_file_path)
-file_handler.setLevel('DEBUG')
-
-# setting the format of logging message 
-formatter= logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
-
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
-
+logger= Logger('data_ingestion.log')
 logger.debug("step 1 - Data Ingestion logging starts here ")
 
 def load_params(params_path : str) -> dict:

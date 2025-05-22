@@ -10,31 +10,12 @@ import yaml
 from dvclive import Live
 import mlflow 
 import dagshub 
+import sys 
 
-log_dir= "logs"
-os.makedirs(log_dir, exist_ok= True)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
+from utils.log_handler import Logger 
 
-# setting up logger 
-logger = logging.getLogger('model_evaluation')
-logger.setLevel('DEBUG')
-
-# make handler
-console_handler= logging.StreamHandler()
-console_handler.setLevel('DEBUG')
-
-# file handler 
-log_file_path= os.path.join(log_dir, 'model_evaluation.log')
-file_handler= logging.FileHandler(log_file_path)
-file_handler.setLevel('DEBUG')
-
-# defining formatter 
-formatter= logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s ')
-console_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
-
-# adding handler 
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
+logger= Logger('model_evaluation.log')
 
 logger.debug(f"Step-5 : Model Evaluation Logging Starts Here")
 
