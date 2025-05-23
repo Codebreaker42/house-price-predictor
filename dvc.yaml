@@ -21,6 +21,13 @@ stages:
     - model_evaluation.random_state
     outs:
     - model_reports/metrics.json
+    - model_reports/model_info.json
+
+  model_registry:
+    cmd: python src/model_registry.py
+    deps:
+    - model_reports/model_info.json
+    - src/model_registry.py
 
 metrics:
 - dvclive/metrics.json

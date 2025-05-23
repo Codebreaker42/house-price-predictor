@@ -14,21 +14,21 @@ stages:
       size: 3328
     params:
       params.yaml:
-        model_training.lr: 0.6
+        model_training.lr: 0.3
         model_training.random_state: 42
         model_training.test_size: 0.2
     outs:
     - path: model/model.pkl
       hash: md5
-      md5: d624e1f54d568eed80707d7c046f7900
-      size: 144423
+      md5: fb0c47d7c086f8ad6f5d38d33a8ec6bb
+      size: 144279
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: model/model.pkl
       hash: md5
-      md5: d624e1f54d568eed80707d7c046f7900
-      size: 144423
+      md5: fb0c47d7c086f8ad6f5d38d33a8ec6bb
+      size: 144279
     - path: src/model_evaluation.py
       hash: md5
       md5: 1e43f9200ea88506b49ec247156f8d12
@@ -40,5 +40,20 @@ stages:
     outs:
     - path: model_reports/metrics.json
       hash: md5
-      md5: b28c84bbc93711bd29cd27e1745c2531
+      md5: 1375e448b91042454cb235c7afb275bf
       size: 109
+    - path: model_reports/model_info.json
+      hash: md5
+      md5: 8394a53a4a8941c0ea22c8dc9fd3406a
+      size: 82
+  model_registry:
+    cmd: python src/model_registry.py
+    deps:
+    - path: model_reports/model_info.json
+      hash: md5
+      md5: 8394a53a4a8941c0ea22c8dc9fd3406a
+      size: 82
+    - path: src/model_registry.py
+      hash: md5
+      md5: 1cef0163d1448546f4169c24393faf66
+      size: 2056
