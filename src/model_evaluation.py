@@ -16,6 +16,8 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from utils.log_handler import Logger 
 from utils.Train_test_split import train_test_split_and_save
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning) 
 
 logger= Logger('model_evaluation.log')
 

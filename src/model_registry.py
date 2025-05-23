@@ -6,6 +6,8 @@ import mlflow
 import mlflow.tracking
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from utils.log_handler import Logger
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning) 
 
 logger= Logger("model_registry.log")
 

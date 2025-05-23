@@ -8,6 +8,8 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from utils.log_handler import Logger 
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning) 
 
 logger= Logger('feature_engineering.log')
 logger.debug("ste3 - Feature Engineering Logging starts here ")
