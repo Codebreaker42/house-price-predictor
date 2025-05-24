@@ -1,12 +1,40 @@
 import streamlit as st
 import numpy as np
-st.title('Pune House Price Prediction')
-
 import pickle as pkl
+import mlflow 
+import dagshub 
+
 pipe=pkl.load(open('pipe.pkl','rb'))
 df=pkl.load(open('df.pkl','rb'))
 
+st.title('Pune House Price Prediction')
 
+# dagshub locally 
+mlflow.set_tracking_uri("https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow")
+dagshub.init(repo_owner="nitinbdkt777" , repo_name= "house-price-predictor", mlflow=True)
+
+def load_latest_version_model(model_name):
+    client = mlflow.MlflowClient()
+    latest_version= client.get_latest_versions(model_name, stages=['Staging'])
+
+    if not latest_version:
+        latest_version = client.get_latest_versions(model_name, stages=["None"])
+    return latest_version[0].version if latest_version else None
+
+model_name= "Xgboost"
+model_version= load_latest_version_model(model_name)
+model_uri= f"models:/{model_name}/{model_version}"
+
+@st.cache_resource
+def load_model():
+    try:
+        model = mlflow.pyfunc.load_model(model_uri)
+        return model
+    except Exception as e:
+        st.error(f"Model loading failed: {str(e)}")
+        raise 
+model= load_model()
+    
 def app():
     # age
     age=st.number_input('How Old House',value=0, step=1)
@@ -95,9 +123,9 @@ def app():
         else:
             Gas_conn_avail=1
         
-        query=np.array([age,area,balconies,bathroom,bhk,floor,place,price_per_sq,neworold,ownership,status,lift_avail,car_parking_avail,Gas_conn_avail])
+        query=np.array([age,area,balconies,bathroom,floor,status,price_per_sq,neworold,ownership,lift_avail,place,car_parking_avail,bhk,Gas_conn_avail])
         query= query.reshape(1,14)
-        st.title("This House Price Is: " + str(int(np.exp(pipe.predict(query)[0]))) + " \u20B9 ")
+        st.title("This House Price Is: " + str(int(np.exp(model.predict(query)[0]))) + " \u20B9 ")
 
 if __name__ == "__main__":
     app()

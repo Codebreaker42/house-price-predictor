@@ -39,7 +39,7 @@ def train_model(x_train : np.ndarray, y_train: np.ndarray, params: dict) -> Grad
         lr= params['learning_rate']
         
         step1=ColumnTransformer([
-            ('col_tnf',OneHotEncoder(sparse_output=False, drop='first'),[10,12])
+            ('col_tnf',OneHotEncoder(sparse_output=False, drop='first', handle_unknown='ignore'),[10,12])
         ],remainder='passthrough')
 
         step2=GradientBoostingRegressor(learning_rate=lr)
