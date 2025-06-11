@@ -38,7 +38,7 @@ def promote_model():
     # promote the new model in production 
     client.transition_model_version_stage(
         name= model_name,
-        version= version.version,
+        version= latest_version_staging,
         stage="Production"
     )
     logger.debug(f"Model version {latest_version_staging} promoted to production")

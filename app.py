@@ -15,7 +15,7 @@ dagshub.init(repo_owner="nitinbdkt777" , repo_name= "house-price-predictor", mlf
 
 def load_latest_version_model(model_name):
     client = mlflow.MlflowClient()
-    latest_version= client.get_latest_versions(model_name, stages=['Staging'])
+    latest_version= client.get_latest_versions(model_name, stages=['Production'])
 
     if not latest_version:
         latest_version = client.get_latest_versions(model_name, stages=["None"])
