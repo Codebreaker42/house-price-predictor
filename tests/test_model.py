@@ -15,4 +15,7 @@ class TestModelLoading(unittest.TestCase):
 
         prod_version = client.get_latest_versions(model_name, stages=['Production'])
         print(prod_version)
+
+if __name__ == "__main__":
+    unittest.main()
         
