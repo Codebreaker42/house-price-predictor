@@ -9,7 +9,8 @@ class TestModelLoading(unittest.TestCase):
         dagshub.init(repo_owner="nitinbdkt777", repo_name="house-price-predictor")
         cls.client = mlflow.MlflowClient()
         cls.model_name = "Xgboost"
-
+        
+    @staticmethod
     def test_model_loaded_from_production(self):
         prod_version = self.client.get_latest_versions(self.model_name, stages=['Production'])
         self.assertTrue(len(prod_version) > 0, "No model in Production stage")
