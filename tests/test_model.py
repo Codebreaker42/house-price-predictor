@@ -9,7 +9,7 @@ class TestModelLoading(unittest.TestCase):
         mlflow.set_tracking_uri("https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow")
 
         # Use token-based authentication (non-interactive)
-        os.environ["DAGSHUB_TOKEN"] = os.getenv("DAGSHUB_TOKEN")  # already set in GitHub Actions
+        os.environ["CAPSTONE_TEST"] = os.getenv("CAPSTONE_TEST")  # already set in GitHub Actions
         dagshub.init(repo_owner="nitinbdkt777", repo_name="house-price-predictor")
 
         client = mlflow.MlflowClient()
