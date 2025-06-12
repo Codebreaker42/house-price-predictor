@@ -8,8 +8,11 @@ class TestModelLoading(unittest.TestCase):
     def setUpClass(cls):
         mlflow.set_tracking_uri("https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow")
 
-        # Use token-based authentication (non-interactive)
-        os.environ["CAPSTONE_TEST"] = os.getenv("CAPSTONE_TEST")  # already set in GitHub Actions
+        token = os.getenv("CAPSTONE_TEST")
+        if not token:
+            raise EnvironmentError("CAPSTONE_TEST is not set in environment.")
+    
+        os.environ["CAPSTONE_TEST"] = token
         dagshub.init(repo_owner="nitinbdkt777", repo_name="house-price-predictor")
 
         client = mlflow.MlflowClient()
