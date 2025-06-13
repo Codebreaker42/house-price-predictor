@@ -14,14 +14,14 @@ stages:
       size: 3435
     params:
       params.yaml:
-        model_training.lr: 0.15
+        model_training.lr: 0.25
         model_training.random_state: 42
         model_training.test_size: 0.2
     outs:
     - path: model/model.pkl
       hash: md5
-      md5: ac187c91e5f616447155e58c17b88570
-      size: 144567
+      md5: 0d7307e0a8e2e622c18d644ab878ce6b
+      size: 144856
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
