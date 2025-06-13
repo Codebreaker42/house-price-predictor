@@ -27,10 +27,10 @@ logger.debug(f"Step-5 : Model Evaluation Logging Starts Here")
 # -------------------------------------------------------------------------------------
 
 # Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("HOUSE")
+dagshub_token = os.getenv("HOUSE_PRICE_TOKEN")
 # print(dagshub_token)
 if not dagshub_token:
-    raise EnvironmentError("HOUSE environment variable is not set")
+    raise EnvironmentError("HOUSE_PRICE_TOKEN environment variable is not set")
 
 os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token

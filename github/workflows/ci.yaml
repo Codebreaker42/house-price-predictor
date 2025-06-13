@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:  # 👈 GLOBAL ENVIRONMENT VARIABLES
-      HOUSE: ${{ secrets.HOUSE }}
+      HOUSE_PRICE_TOKEN: ${{ secrets.HOUSE_PRICE_TOKEN }}
 
     steps:
       - name: checkout code
@@ -29,6 +29,15 @@ jobs:
       - name: install dependencies
         run: |
           pip install -r requirements.txt
+      
+      - name: Debug env
+        run: |
+          if [ -z "$HOUSE" ]; then
+            echo "HOUSE is NOT set"
+            exit 1
+          else
+            echo "HOUSE is set"
+          fi
 
       - name: run pipeline
         run: |

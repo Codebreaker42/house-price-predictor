@@ -15,9 +15,9 @@ logger= Logger("model_registry.log")
 # Below code block is for production use
 # -------------------------------------------------------------------------------------
 # Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("HOUSE")
+dagshub_token = os.getenv("HOUSE_PRICE_TOKEN")
 if not dagshub_token:
-    raise EnvironmentError("HOUSE environment variable is not set")
+    raise EnvironmentError("HOUSE_PRICE_TOKEN environment variable is not set")
 
 os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
