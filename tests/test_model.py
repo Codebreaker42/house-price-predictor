@@ -21,7 +21,7 @@ class TestModelLoading(unittest.TestCase):
         # repo_name = "house-price-predictor"
         # # Set up MLflow tracking URI
         # mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
-        cls.client= mlflow.MlflowClient()
+        # cls.client= mlflow.MlflowClient()
 
         # local use 
         # ------------------------------------------------------------------------------------------
