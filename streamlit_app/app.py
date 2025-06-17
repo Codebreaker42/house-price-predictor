@@ -5,8 +5,8 @@ import mlflow
 import dagshub 
 import os
 
-pipe=pkl.load(open('pipe.pkl','rb'))
-df=pkl.load(open('df.pkl','rb'))
+# pipe=pkl.load(open('app/pipe.pkl','rb'))
+df=pkl.load(open('app/df.pkl','rb'))
 
 st.title('Pune House Price Prediction')
 
@@ -50,6 +50,7 @@ def load_model():
     except Exception as e:
         st.error(f"Model loading failed: {str(e)}")
         raise 
+    
 model= load_model()
     
 def app():
