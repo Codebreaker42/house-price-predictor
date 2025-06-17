@@ -4,7 +4,7 @@ data_ingestion:
 model_training:
   test_size: 0.2
   random_state: 42
-  lr: 0.15
+  lr: 0.25
 model_evaluation:
   test_size: 0.2
   random_state: 42
