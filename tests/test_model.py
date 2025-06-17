@@ -22,7 +22,7 @@ class TestModelLoading(unittest.TestCase):
         # repo_name = "house-price-predictor"
         # # Set up MLflow tracking URI
         # mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
-        # cls.client= mlflow.MlflowClient()
+        cls.client= mlflow.MlflowClient()
 
         # local use 
         # ------------------------------------------------------------------------------------------
@@ -31,9 +31,10 @@ class TestModelLoading(unittest.TestCase):
         # cls.client= mlflow.MlflowClient()
         
         
-    @staticmethod
+    # @staticmethod
     def test_model_loaded_from_production(self):
-        pass
+        self.client
+        # pass
         # prod_version = self.client.get_latest_versions(self.model_name, stages=['Production'])
         # self.assertTrue(len(prod_version) > 0, "No model in Production stage")
 
