@@ -1,12 +1,15 @@
-FROM python:3.9 
+FROM python:3.10-slim
 
-WORKDIR /docker_app
+WORKDIR /streamlit_app
 
-COPY streamlit_app/ /docker_app/
+COPY streamlit_app/ /streamlit_app/
 
 # COPY streamlit_app/df.pkl /docker_app/df.pkl
 
-RUN pip install -r requirements.txt 
+# Show pip logs in real-time
+ENV PYTHONUNBUFFERED=1
+
+RUN pip install --no-cache-dir --progress-bar=force -r requirements.txt
 
 EXPOSE 5000
 

@@ -5,8 +5,14 @@ import mlflow
 import dagshub 
 import os
 
+# without mlops
 # pipe=pkl.load(open('app/pipe.pkl','rb'))
-df=pkl.load(open('app/df.pkl','rb'))
+
+# for local
+df=pkl.load(open('streamlit_app/df.pkl','rb'))
+
+# for docker 
+# df = pkl.load(open('df.pkl','rb'))
 
 st.title('Pune House Price Prediction')
 
