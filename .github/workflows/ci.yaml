@@ -6,11 +6,11 @@ jobs:
   project-testing:
     runs-on: ubuntu-latest
 
-    env:  # 👈 GLOBAL ENVIRONMENT VARIABLES
+    env:
       HOUSE_PRICE_TOKEN: ${{ secrets.HOUSE_PRICE_TOKEN }}
 
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Python 3.9
@@ -24,19 +24,19 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip- 
+            ${{ runner.os }}-pip-
 
-      - name: install dependencies
-        run: |
-          pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: run pipeline
-        run: |
-          dvc repro
+      - name: Pull data from DVC remote
+        run: dvc pull
+
+      - name: Run pipeline
+        run: dvc repro
 
       - name: Run model tests
-        run: |
-          python -m unittest tests/test_model.py
+        run: python -m unittest tests/test_model.py
 
       - name: Promote model to production
         if: success()
