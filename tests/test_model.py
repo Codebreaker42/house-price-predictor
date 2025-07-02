@@ -6,9 +6,6 @@ import os
 class TestModelLoading(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        pass
-        # Below code block is for production use
-        # -------------------------------------------------------------------------------------
         # Set up DagsHub credentials for MLflow tracking
         dagshub_token = os.getenv("HOUSE_PRICE_TOKEN")
         if not dagshub_token:
@@ -20,18 +17,14 @@ class TestModelLoading(unittest.TestCase):
         dagshub_url = "https://dagshub.com"
         repo_owner = "nitinbdkt777"
         repo_name = "house-price-predictor"
+
         # Set up MLflow tracking URI
         mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
-        cls.client= mlflow.MlflowClient()
+        cls.client = mlflow.MlflowClient()
 
-        # local use 
-        # ------------------------------------------------------------------------------------------
-        # mlflow.set_tracking_uri('https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow')
-        # dagshub.init(repo_owner="nitinbdkt777", repo_name="house-price-predictor")
-        # cls.client= mlflow.MlflowClient()
-        
-        
-    # @staticmethod
+        # Define the registered model name
+        cls.model_name = "Xgboost"
+
     def test_model_loaded_from_production(self):
         prod_version = self.client.get_latest_versions(self.model_name, stages=['Production'])
         self.assertTrue(len(prod_version) > 0, "No model in Production stage")
