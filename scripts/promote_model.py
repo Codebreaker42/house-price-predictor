@@ -8,10 +8,27 @@ from utils.log_handler import Logger
 
 logger= Logger("model_promotion.log")
 
+# Below code block is for production use
+# -------------------------------------------------------------------------------------
+# Set up DagsHub credentials for MLflow tracking
+dagshub_token = os.getenv("HOUSE_PRICE_TOKEN")
+if not dagshub_token:
+    raise EnvironmentError("HOUSE_PRICE_TOKEN environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
+dagshub_url = "https://dagshub.com"
+repo_owner = "nitinbdkt777"
+repo_name = "house-price-predictor"
+# Set up MLflow tracking URI
+mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+
+
 # below code for loacal use 
-mlflow.set_tracking_uri('https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow')
-dagshub.init(repo_owner= "nitinbdkt777", repo_name="house-price-predictor")
-logger.debug("dagshub local setup is successfully done")
+# mlflow.set_tracking_uri('https://dagshub.com/nitinbdkt777/house-price-predictor.mlflow')
+# dagshub.init(repo_owner= "nitinbdkt777", repo_name="house-price-predictor")
+# logger.debug("dagshub local setup is successfully done")
 
 def promote_model():
     """ Its promote the latest model in production to the previous
